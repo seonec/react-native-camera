@@ -31,6 +31,7 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.HybridBinarizer;
 
@@ -306,6 +307,7 @@ class RCTCameraViewFinder extends TextureView implements TextureView.SurfaceText
         }
 
         hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
+        hints.put(DecodeHintType.TRY_HARDER, true);
         _multiFormatReader.setHints(hints);
     }
 
@@ -398,6 +400,7 @@ class RCTCameraViewFinder extends TextureView implements TextureView.SurfaceText
                     }
                 }
 
+                event.putString("extension", (result.getResultMetadata().containsKey(ResultMetadataType.UPC_EAN_EXTENSION)) ? (String) result.getResultMetadata().get(ResultMetadataType.UPC_EAN_EXTENSION) : "none");
                 event.putArray("bounds", resultPoints);
                 event.putString("data", result.getText());
                 event.putString("type", result.getBarcodeFormat().toString());
